@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    hikari: 
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://192.168.0.157:3306/eshop
+      username: root
+      password: 123456
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-test-query: select 1
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  redis:
+    cluster:
+      nodes: 
+      - 192.168.0.222:7004
+      - 192.168.0.222:7003
+      - 192.168.0.223:7006
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+
+mybatis:
+  mapper-locations:
+  - com/**/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    aggressive-lazy-loading: true
+    lazy-loading-enabled: true
+
+logging:
+  level: 
+    root: INFO 
+    

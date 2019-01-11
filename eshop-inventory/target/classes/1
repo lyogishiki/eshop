@@ -1,0 +1,7 @@
+mybatis.mapper-locations=classpath:com/**/*Mapper.xml
+mybatis.type-aliases-package=com.mybatis.model
+
+mybatis.configuration.map-underscore-to-camel-case=true
+mybatis.configuration.aggressive-lazy-loading=true
+mybatis.configuration.lazy-loading-enabled=true
+      

@@ -41,7 +41,7 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
 		int hash = distributeKey == null ? 0 : (h = distributeKey.hashCode()) ^ (h >>> 16);
 
 		int index = (requestQueue.size() - 1) & hash;
-
+		System.out.println("====================路由商品队列，商品id:" + distributeKey + ",路由到的队列:" + index);
 		return requestQueue.getQueue(index);
 	}
 }

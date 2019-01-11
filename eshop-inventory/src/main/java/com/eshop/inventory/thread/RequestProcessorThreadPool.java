@@ -49,6 +49,10 @@ public class RequestProcessorThreadPool {
 
 	}
 	
+	public void shutdown() {
+		threadPool.shutdownNow();
+	}
+	
 	public static void initPool() {
 		RequestProcessorThreadPool.getInstance();
 	}

@@ -2,12 +2,16 @@ package com.eshop.inventory.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eshop.inventory.dao.RedisDao;
 import com.eshop.inventory.mapper.ProductInventoryMapper;
 import com.eshop.inventory.model.ProductInventory;
 import com.eshop.inventory.service.ProductInventoryService;
 
+@Service
+@Transactional(readOnly=false)
 public class ProductInventoryServiceImpl implements ProductInventoryService{
 
 	@Autowired
@@ -17,8 +21,13 @@ public class ProductInventoryServiceImpl implements ProductInventoryService{
 	private RedisDao redisDao;
 	
 	@Override
+
 	public void updateProductInventory(ProductInventory productInventory) {
-		productInventoryMapper.updateProductInventory(productInventory);
+		try {
+			productInventoryMapper.updateProductInventory(productInventory);
+		} catch (Error e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

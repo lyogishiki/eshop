@@ -8,6 +8,7 @@ import com.eshop.inventory.request.ProductInventoryCacheReloadRequest;
 import com.eshop.inventory.request.ProductInventoryUpdateRequest;
 import com.eshop.inventory.request.Request;
 import com.eshop.inventory.request.RequestQueue;
+import com.google.common.cache.Cache;
 
 public class WorkerThread implements Callable<Boolean>{
 
@@ -26,7 +27,7 @@ public class WorkerThread implements Callable<Boolean>{
 
 	@Override
 	public Boolean call() throws Exception {
-		
+		System.out.println("====================工作线程开始工作~~~~~");
 		while(true) {
 			if(isShutdown) {
 				break;
@@ -39,13 +40,13 @@ public class WorkerThread implements Callable<Boolean>{
 				 * 已下是去重的操作。
 				 */
 				RequestQueue requestQueue = RequestQueue.getInstance();
-				Map<Integer, Boolean> flagMap = requestQueue.getFlagMap();
+				Cache<Integer, Boolean> flagMap = requestQueue.getFlagMap();
 				
 				if(request instanceof ProductInventoryUpdateRequest) {
 //				如果是一个更新请求，那么就将这个ProductID对应的标志设为true
 					flagMap.put(request.getDistributeKey(), true);
 				}else if(request instanceof ProductInventoryCacheReloadRequest) {
-					Boolean flag = flagMap.get(request.getDistributeKey());
+					Boolean flag = flagMap.getIfPresent(request.getDistributeKey());
 					if(flag == null) {
 //						如果flag是null，那么就说明没有之前的写请求，所以我们就读一下数据库，并把数据放入redis中,也就是加载到内存队列。
 						flagMap.put(request.getDistributeKey(), false);
@@ -60,7 +61,8 @@ public class WorkerThread implements Callable<Boolean>{
 					
 				}
 			}
-			
+			System.out.println("===============工作线程处理请求: 商品id : " + request.getDistributeKey() 
+				+ "，" + request);
 			request.process();
 //			假如执行完一个读请求之后，假设数据刷新到redis中，
 //			但是后面可能redis中的数据会因为内存满了，而被自动清理掉了
